@@ -13,7 +13,9 @@ import datetime
 #visualisations
 import seaborn as sb
 import matplotlib.pyplot as plt
-
+##
+import mlflow
+import mlflow.sklearn
 
 # data preprocessing
 from sklearn.impute import SimpleImputer
@@ -189,91 +191,73 @@ y=store_train_features['Sales']
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.20, random_state=15)
 
 #X_train.size, X_test.size, y_train.size, y_test.size
-
+with mlflow.start_run():
 ####encode###
-le = LabelEncoder()
-le.fit(X_train['StoreType'].astype(str))
-X_train['StoreType']= le.transform(X_train['StoreType'].astype(str))
+    le = LabelEncoder()
+    le.fit(X_train['StoreType'].astype(str))
+    X_train['StoreType']= le.transform(X_train['StoreType'].astype(str))
 ###
-le = LabelEncoder()
-le.fit(X_train['Assortment'].astype(str))
-X_train['Assortment']= le.transform(X_train['Assortment'].astype(str))
+    le = LabelEncoder()
+    le.fit(X_train['Assortment'].astype(str))
+    X_train['Assortment']= le.transform(X_train['Assortment'].astype(str))
 
 ##
-le = LabelEncoder()
-le.fit(X_train['StateHoliday'].astype(str))
-X_train['StateHoliday']= le.transform(X_train['StateHoliday'].astype(str))
+    le = LabelEncoder()
+    le.fit(X_train['StateHoliday'].astype(str))
+    X_train['StateHoliday']= le.transform(X_train['StateHoliday'].astype(str))
 ##
-le = LabelEncoder()
-le.fit(X_train['PromoInterval'].astype(str))
-X_train['PromoInterval']= le.transform(X_train['PromoInterval'].astype(str))
+    le = LabelEncoder()
+    le.fit(X_train['PromoInterval'].astype(str))
+    X_train['PromoInterval']= le.transform(X_train['PromoInterval'].astype(str))
 ####
-le = LabelEncoder()
-le.fit(X_test['StoreType'].astype(str))
-X_test['StoreType']= le.transform(X_test['StoreType'].astype(str))
+    le = LabelEncoder()
+    le.fit(X_test['StoreType'].astype(str))
+    X_test['StoreType']= le.transform(X_test['StoreType'].astype(str))
 ###
-le = LabelEncoder()
-le.fit(X_test['Assortment'].astype(str))
-X_test['Assortment']= le.transform(X_test['Assortment'].astype(str))
+    le = LabelEncoder()
+    le.fit(X_test['Assortment'].astype(str))
+    X_test['Assortment']= le.transform(X_test['Assortment'].astype(str))
 ##
-le = LabelEncoder()
-le.fit(X_test['StateHoliday'].astype(str))
-X_test['StateHoliday']= le.transform(X_test['StateHoliday'].astype(str))
+    le = LabelEncoder()
+    le.fit(X_test['StateHoliday'].astype(str))
+    X_test['StateHoliday']= le.transform(X_test['StateHoliday'].astype(str))
 ##
 ##
-le = LabelEncoder()
-le.fit(X_test['PromoInterval'].astype(str))
-X_test['PromoInterval']= le.transform(X_test['PromoInterval'].astype(str))
+    le = LabelEncoder()
+    le.fit(X_test['PromoInterval'].astype(str))
+    X_test['PromoInterval']= le.transform(X_test['PromoInterval'].astype(str))
 ###
-regressor = RandomForestRegressor(n_estimators=10, criterion='mse',random_state=0)
-regressor.fit(X_train, y_train)
+    regressor = RandomForestRegressor(n_estimators=10, criterion='mse',random_state=0)
+    regressor.fit(X_train, y_train)
 ###predict###
-'''
-def clean_dataset(df):
-    assert isinstance(df, pd.DataFrame), "df needs to be a pd.DataFrame"
-    df.dropna(inplace=True)
-    indices_to_keep = ~df.isin([np.nan, np.inf, -np.inf]).any(1)
-    return df[indices_to_keep].astype(np.float64)
-##
-clean_dataset(y_train)
-##
-
-def _assert_all_finite(X):
-#Like assert_all_finite, but only for ndarray.
-    X = np.asanyarray(X)
-# First try an O(n) time, O(1) space solution for the common case that
-# everything is finite; fall back to O(n) space np.isfinite to prevent
-# false positives from overflow in sum method.
-    if (X.dtype.char in np.typecodes['AllFloat'] and not np.isfinite(X.sum())and not np.isfinite(X).all()):
-        raise ValueError("Input contains NaN, infinity" or "a value too large for %r. % X.dtype")
-'''
-y_pred = regressor.predict(X_test)
-y_pred_l = pd.DataFrame(y_pred, columns=["sales prediction"])
-print(y_pred_l.head())
-y_test.head()
+#####################################33
+    y_pred = regressor.predict(X_test)
+    y_pred_l = pd.DataFrame(y_pred, columns=["sales prediction"])
+    print(y_pred_l.head())
+    y_test.head()
 
 ###
-def rmspe(y, result):
-    rmspe = np.sqrt(np.mean( (y - result)**2 ))
-    return rmspe
-RFR = RandomForestRegressor(n_estimators=10,  criterion='mse',  max_depth=5,  min_samples_split=2, 
-       min_samples_leaf=1, min_weight_fraction_leaf=0.0,  max_features='auto',max_leaf_nodes=None, 
-     min_impurity_decrease=0.0,  min_impurity_split=None,  bootstrap=True, oob_score=False, n_jobs=4, random_state=31, 
- verbose=0,  warm_start=False)
+    def rmspe(y, result):
+        rmspe = np.sqrt(np.mean( (y - result)**2 ))
+        return rmspe
+    RFR = RandomForestRegressor(n_estimators=10,  criterion='mse',  max_depth=5,  min_samples_split=2, 
+                                min_samples_leaf=1, min_weight_fraction_leaf=0.0,  max_features='auto',max_leaf_nodes=None, 
+                                min_impurity_decrease=0.0,  min_impurity_split=None,  bootstrap=True, oob_score=False, n_jobs=4, random_state=31, 
+                                verbose=0,  warm_start=False)
 #with mlflow.start_run
-params = {'max_depth':(4,6,8,10,12,14,16,20),'n_estimators':(4,8,16,24,48,72,96,128),'min_samples_split':(2,4,6,8,10)}
+    params = {'max_depth':(4,6,8,10,12,14,16,20),'n_estimators':(4,8,16,24,48,72,96,128),'min_samples_split':(2,4,6,8,10)}
 #scoring_fnc = metrics.make_scorer(rmspe)
 #the dimensionality is high, the number of combinations we have to search is enormous, using
 #RandomizedSearchCV 
 # is a better option then GridSearchCV
-grid = model_selection.RandomizedSearchCV(estimator=RFR,param_distributions=params,cv=5,)
-grid.fit(X_train, y_train)
+    grid = model_selection.RandomizedSearchCV(estimator=RFR,param_distributions=params,cv=5,)
+    grid.fit(X_train, y_train)
 ###Test our RF on the validation set##
 #with the optimal parameters i got let's see how it behaves with the validation set\n",
-rfr_val=RandomForestRegressor(n_estimators=128,criterion='mse',  max_depth=20,min_samples_split=10,  min_samples_leaf=1,  min_weight_fraction_leaf=0.0,max_features='auto',max_leaf_nodes=None,min_impurity_decrease=0.0,min_impurity_split=None,bootstrap=True,oob_score=False, n_jobs=4,random_state=None, verbose=0,warm_start=False)
-model_RF_test=rfr_val.fit(X_train,y_train)
-result=model_RF_test.predict(X_test)
-plt.hist(result)
+    rfr_val=RandomForestRegressor(n_estimators=128,criterion='mse',  max_depth=20,min_samples_split=10,  min_samples_leaf=1,  min_weight_fraction_leaf=0.0,max_features='auto',max_leaf_nodes=None,min_impurity_decrease=0.0,min_impurity_split=None,bootstrap=True,oob_score=False, n_jobs=4,random_state=None, verbose=0,warm_start=False)
+    model_RF_test=rfr_val.fit(X_train,y_train)
+    result=model_RF_test.predict(X_test)
+    plt.hist(result)
 #mean square error
-mean_squared_error(y_test,result)
+    mean_squared_error(y_test,result)
 ##Predicting using XGBoost##
