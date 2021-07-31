@@ -1,0 +1,15 @@
+artifact_uri: ./mlruns/0/d3fc143a867841bfab7aa0e930357d6e/artifacts
+end_time: null
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+name: ''
+run_id: d3fc143a867841bfab7aa0e930357d6e
+run_uuid: d3fc143a867841bfab7aa0e930357d6e
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1627756952603
+status: 1
+tags: []
+user_id: Smegn
