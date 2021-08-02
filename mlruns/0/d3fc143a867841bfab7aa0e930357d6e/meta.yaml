@@ -1,5 +1,5 @@
 artifact_uri: ./mlruns/0/d3fc143a867841bfab7aa0e930357d6e/artifacts
-end_time: null
+end_time: 1627761454384
 entry_point_name: ''
 experiment_id: '0'
 lifecycle_stage: active
@@ -10,6 +10,6 @@ source_name: ''
 source_type: 4
 source_version: ''
 start_time: 1627756952603
-status: 1
+status: 4
 tags: []
 user_id: Smegn
